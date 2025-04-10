@@ -29,8 +29,6 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
 
         while queue:
             current: Node = queue.popleft()
-            if current.cost >= least_cost:
-                continue
 
             if current.balance < 0:
                 change = return_change(-1 * current.balance)
@@ -39,8 +37,8 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
                 current.cost += len(change)
                 current.balance += sum(change)
 
-                if current.cost >= least_cost:
-                    continue
+            if current.cost >= least_cost:
+                continue
 
             if current.balance == 0:
                 shortest_path = current.path
@@ -74,22 +72,20 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
 if __name__ == "__main__":
     from agora.helper import populate_wallet
 
-    price: Decimal = Decimal("15.06")
-    money: dict[str, int] = {
-        "100": 1,
-        "20": 4,
-        "10": 2,
-        "1": 5,
-        "0.25": 1,
-        "0.10": 6,
-        "0.05": 3,
-        "0.01": 5,
-    }
+    price = Decimal("105.06")
+    wallet = populate_wallet(
+        {
+            "100": 100,
+            "20": 4,
+            "10": 2,
+            "1": 5,
+            "0.25": 1,
+            "0.10": 6,
+            "0.05": 3,
+            "0.01": 5,
+        }
+    )
 
-    # setup wallet
-    wallet = populate_wallet(money)
-
-    bfs = bfs_factory(wallet, price)
-    path, cost = bfs()
+    path, cost = bfs_factory(wallet, price)()
 
     print(f"Path: {path}")

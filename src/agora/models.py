@@ -11,7 +11,7 @@ class Node:
     cost: int
 
     def __post_init__(self):
-        self.wallet = sorted(self.wallet)
+        self.wallet = sorted(self.wallet, reverse=True)
 
     @property
     def hashable_wallet(self) -> tuple[Decimal, ...]:
