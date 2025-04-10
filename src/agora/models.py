@@ -1,25 +1,18 @@
-# from pydantic import BaseModel, Field
 from dataclasses import dataclass
-
-"""
-Algorithm: Top of Mind
-
-1. Verify you have enough money in your wallet to make a payment - raise a ValueError if not.
-2. Find the largest note less than the payment amount.
-3. Find the smallest note greater than the payment amount.
-"""
-
-
-@dataclass
-class Wallet:
-    pass
+from decimal import Decimal
 
 
 @dataclass
 class Node:
-
-    id: str
     name: str
-    value: float
-    wallet: list[float]
-    description: str
+    wallet: list[Decimal]
+    balance: Decimal
+    path: list[Decimal]
+    cost: int
+
+    def __post_init__(self):
+        self.wallet = sorted(self.wallet, reverse=True)
+
+    @property
+    def hashable_wallet(self) -> tuple[Decimal, ...]:
+        return tuple(self.wallet)
