@@ -61,7 +61,7 @@ def find_viable_combinations(
     }
 
     if not viable_combinations:
-        raise InsufficientFundsError(f"Insufficient funds for transaction of {target_price}")
+        return []
 
     return sorted(viable_combinations, key=lambda combo: combo[0], reverse=True)
 
