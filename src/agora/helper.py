@@ -2,9 +2,7 @@ from decimal import Decimal
 from itertools import combinations
 
 from agora.exceptions import InsufficientFundsError
-from agora.ref_data import DENOMINATION_IN_DECIMAL
-
-DENOMINATION_IN_DECIMAL
+from agora.ref_data import DECIMALIZED_DENOMINATIONS_USD
 
 
 def populate_wallet(money: dict[str, int]) -> list[Decimal]:
@@ -79,7 +77,7 @@ def return_change(balance: Decimal) -> list[Decimal]:
 
     # recursive case
     if balance > zero_balance:
-        change = max(filter(lambda x: x <= balance, DENOMINATION_IN_DECIMAL))
+        change = max(filter(lambda ccy: ccy <= balance, DECIMALIZED_DENOMINATIONS_USD))
         change_list = return_change(balance - change)
         change_list.append(change)
 

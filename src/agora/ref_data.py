@@ -14,6 +14,6 @@ USD_DENOMINATIONS: list[str] = [
     "100.00",
 ]
 
-DENOMINATION_IN_DECIMAL: list[Decimal] = [
+DECIMALIZED_DENOMINATIONS_USD: list[Decimal] = [
     Decimal(denomination) for denomination in USD_DENOMINATIONS
 ]
