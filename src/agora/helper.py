@@ -13,12 +13,12 @@ def populate_wallet(money: dict[str, int]) -> list[Decimal]:
     return wallet
 
 
-def get_total(wallet: list[Decimal]) -> Decimal:
+def get_total(wallet: list[Decimal] | tuple[Decimal, ...]) -> Decimal:
     return Decimal(sum(wallet))
 
 
 def find_viable_combinations(
-    wallet: list[Decimal], combination_length: int, target_price: float
+    wallet: list[Decimal], combination_length: int, target_price: Decimal
 ) -> list[tuple[Decimal, ...]]:
     """
     Generate a list of unique combinations from the wallet, where sum total equals or exceeds target_price
