@@ -25,6 +25,7 @@ def wallet() -> list[Decimal]:
         (Decimal("15.05"), 2, 13),
         (Decimal("150.05"), 2, 0),
     ],
+    ids=["Price: $15.05", "Price: $150.05"],
 )
 def test_path_validation(wallet, price, picks, expected):
     all_paths = len(helper.find_viable_combinations(wallet, picks, price))
