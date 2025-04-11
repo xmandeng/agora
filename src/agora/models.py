@@ -18,7 +18,7 @@ class Node:
             self.return_change()
 
     @classmethod
-    def create_child(cls, denomination: Decimal, parent: "Node") -> "Node":
+    def create_child_node(cls, denomination: Decimal, parent: "Node") -> "Node":
         return cls(
             name=str(denomination),
             wallet=parent.pick_from_wallet(denomination),

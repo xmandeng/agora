@@ -2,22 +2,19 @@ from collections import deque
 from decimal import Decimal
 from typing import Callable
 
+from agora.exceptions import check_for_sufficient_funds
 from agora.models import Node
 
 
 def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[list[Decimal], int]]:
-
-    if not wallet or price <= 0:
-        raise ValueError("Invalid wallet or price")
-
-    elif sum(wallet) < price:
-        raise ValueError(f"Insufficient funds: {sum(wallet)} < {price}")
+    check_for_sufficient_funds(wallet, price)
 
     shortest_path: list[Decimal] = wallet
     least_cost: int = len(wallet)
 
     def breadth_first_search() -> tuple[list[Decimal], int]:
         nonlocal shortest_path, least_cost
+
         queue: deque = deque()
         visited: set[tuple[Decimal, ...]] = set()
 
@@ -38,7 +35,7 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
                 continue
 
             for currency in parent.denominations:
-                child = Node.create_child(currency, parent)
+                child = Node.create_child_node(currency, parent)
 
                 if child.hash in visited:
                     continue
