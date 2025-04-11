@@ -28,10 +28,10 @@ def test_wallet_order(wallet, expected):
     assert node.wallet == expected, "Wallet improperly sorted"
 
 
-def test_wallet_hash():
+def test_hash():
     wallet = [Decimal("1"), Decimal("2"), Decimal("3")]
     node = Node(name="test", wallet=wallet, balance=Decimal("0"), path=[], cost=0)
-    assert node.wallet_hash == (Decimal("3"), Decimal("2"), Decimal("1")), "Wallet hash mismatch"
+    assert node.hash == (Decimal("3"), Decimal("2"), Decimal("1")), "Wallet hash mismatch"
 
 
 @pytest.mark.parametrize(

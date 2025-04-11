@@ -18,17 +18,17 @@ class Node:
             self.return_change()
 
     @classmethod
-    def create_child(cls, ccy: Decimal, node: "Node") -> "Node":
+    def create_child(cls, denomination: Decimal, parent: "Node") -> "Node":
         return cls(
-            name=str(ccy),
-            wallet=node.pick_from_wallet(ccy),
-            balance=node.balance - ccy,
-            path=node.path + [ccy],
-            cost=node.cost + 1,
+            name=str(denomination),
+            wallet=parent.pick_from_wallet(denomination),
+            balance=parent.balance - denomination,
+            path=parent.path + [denomination],
+            cost=parent.cost + 1,
         )
 
     @property
-    def wallet_hash(self) -> tuple[Decimal, ...]:
+    def hash(self) -> tuple[Decimal, ...]:
         return tuple(self.wallet)
 
     @property
