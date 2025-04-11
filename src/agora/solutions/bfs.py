@@ -18,10 +18,10 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
 
     def breadth_first_search() -> tuple[list[Decimal], int]:
         nonlocal shortest_path, least_cost
+        queue: deque = deque()
+        visited: set[tuple[Decimal, ...]] = set()
 
         root = Node(name="root", wallet=wallet, balance=price, path=[], cost=0)
-        visited: set[tuple[Decimal, ...]] = set()
-        queue: deque = deque()
 
         queue.append(root)
         visited.add(root.wallet_hash)
@@ -33,19 +33,12 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
                 continue
 
             if current.balance == 0:
-                shortest_path = current.path
                 least_cost = current.cost
+                shortest_path = current.path
                 continue
 
             for ccy in current.denominations:
-
-                node = Node(
-                    name=str(ccy),
-                    wallet=current.pick_from_wallet(ccy),
-                    balance=current.balance - ccy,
-                    path=current.path + [ccy],
-                    cost=current.cost + 1,
-                )
+                node = Node.create_child(ccy, current)
 
                 if node.wallet_hash in visited:
                     continue

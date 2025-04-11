@@ -17,6 +17,16 @@ class Node:
         if self.balance < 0:
             self.return_change()
 
+    @classmethod
+    def create_child(cls, ccy: Decimal, node: "Node") -> "Node":
+        return cls(
+            name=str(ccy),
+            wallet=node.pick_from_wallet(ccy),
+            balance=node.balance - ccy,
+            path=node.path + [ccy],
+            cost=node.cost + 1,
+        )
+
     @property
     def wallet_hash(self) -> tuple[Decimal, ...]:
         return tuple(self.wallet)
