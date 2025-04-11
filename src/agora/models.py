@@ -15,7 +15,7 @@ class Node:
     def __post_init__(self):
         self.wallet = sorted(self.wallet, reverse=True)
         if self.balance < 0:
-            self.make_change()
+            self.return_change()
 
     @property
     def wallet_hash(self) -> tuple[Decimal, ...]:
@@ -30,7 +30,7 @@ class Node:
         new_wallet.remove(denomination)
         return new_wallet
 
-    def make_change(self) -> None:
+    def return_change(self) -> None:
         change = return_change(-1 * self.balance)
         self.path += change
         self.cost += len(change)

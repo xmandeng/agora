@@ -52,7 +52,7 @@ def test_wallet_hash():
     ],
     ids=["negative", "zero", "positive"],
 )
-def test_change_path(balance, expected):
+def test_return_change_path(balance, expected):
     node = Node(name="test", wallet=[], balance=balance, path=[], cost=0)
     assert node.path == expected, "Change path not properly calculated"
 
@@ -62,23 +62,23 @@ def test_change_path(balance, expected):
     [
         (
             Decimal("-1"),
-            test_path := [Decimal("5")],
-            len(test_path) + 1,
+            [Decimal("5")],
+            len([Decimal("5")]) + 1,
         ),
         (
             Decimal("0"),
-            test_path,
-            len(test_path),
+            [Decimal("5")],
+            len([Decimal("5")]),
         ),
         (
             Decimal("1"),
-            test_path,
-            len(test_path),
+            [Decimal("5")],
+            len([Decimal("5")]),
         ),
     ],
     ids=["negative", "zero", "positive"],
 )
-def test_change_cost(balance, path, expected):
+def test_return_change_cost(balance, path, expected):
     node = Node(name="test", wallet=[], balance=balance, path=path, cost=len(path))
     assert node.cost == expected, "Cost not properly calculated"
 
@@ -101,6 +101,6 @@ def test_change_cost(balance, path, expected):
     ],
     ids=["negative", "zero", "positive"],
 )
-def test_change_balance(balance, expected):
+def test_return_change_balance(balance, expected):
     node = Node(name="test", wallet=[], balance=balance, path=[], cost=0)
     assert node.balance == expected, "Balance not properly updated"
