@@ -49,7 +49,7 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
 
 
 if __name__ == "__main__":
-    from agora.helper import populate_wallet
+    from agora.helpers import populate_wallet
 
     price = Decimal("105.06")
     wallet = populate_wallet(
