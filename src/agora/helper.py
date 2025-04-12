@@ -64,7 +64,7 @@ def find_viable_combinations(
     return sorted(viable_combinations, key=lambda combo: combo[0], reverse=True)
 
 
-def calculate_change(balance: Decimal) -> list[Decimal]:
+def return_change(balance: Decimal) -> list[Decimal]:
     zero_balance = Decimal("0")
 
     # exception handling
@@ -78,7 +78,7 @@ def calculate_change(balance: Decimal) -> list[Decimal]:
     # recursive case
     if balance > zero_balance:
         change = max(filter(lambda ccy: ccy <= balance, DECIMALIZED_DENOMINATIONS_USD))
-        change_list = calculate_change(balance - change)
+        change_list = return_change(balance - change)
         change_list.append(change)
 
     return change_list
