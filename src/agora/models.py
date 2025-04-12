@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from decimal import Decimal
 
-from agora.helper import return_change
+from agora.helpers import calculate_change
 
 
 @dataclass
@@ -14,6 +14,7 @@ class Node:
 
     def __post_init__(self):
         self.wallet = sorted(self.wallet, reverse=True)
+
         if self.balance < 0:
             self.return_change()
 
@@ -36,12 +37,15 @@ class Node:
         return set(self.wallet)
 
     def pick_from_wallet(self, denomination: Decimal) -> list[Decimal]:
+        if denomination not in self.wallet:
+            raise ValueError(f"Denomination {denomination} not in wallet")
+
         new_wallet: list[Decimal] = self.wallet.copy()
         new_wallet.remove(denomination)
         return new_wallet
 
     def return_change(self) -> None:
-        change = return_change(-1 * self.balance)
+        change = calculate_change(-1 * self.balance)
         self.path += change
         self.cost += len(change)
         self.balance += sum(change)

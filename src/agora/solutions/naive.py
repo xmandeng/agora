@@ -2,7 +2,7 @@ import logging
 from decimal import Decimal
 from typing import Callable
 
-from agora.helper import find_viable_combinations, get_total, return_change
+from agora.helpers import calculate_change, find_viable_combinations, get_total
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
@@ -24,7 +24,7 @@ def naive_factory(
 
             for combination in find_viable_combinations(wallet, picks, price):
 
-                change = return_change(get_total(combination) - price)
+                change = calculate_change(get_total(combination) - price)
                 ccy_exchanged = len(combination) + len(change)
 
                 if ccy_exchanged < best_length:
@@ -41,7 +41,7 @@ def naive_factory(
 
 
 if __name__ == "__main__":
-    from agora.helper import populate_wallet
+    from agora.helpers import populate_wallet
 
     price = Decimal("105.05")
     wallet = populate_wallet(
