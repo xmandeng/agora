@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-import agora.helpers as helpers
+import agora.helper as helper
 
 
 @pytest.fixture(scope="session")
@@ -16,7 +16,7 @@ def wallet() -> list[Decimal]:
         "0.10": 6,
         "0.05": 3,
     }
-    return helpers.populate_wallet(money)
+    return helper.populate_wallet(money)
 
 
 @pytest.mark.parametrize(
@@ -28,6 +28,6 @@ def wallet() -> list[Decimal]:
     ids=["Price: $15.05", "Price: $150.05"],
 )
 def test_path_validation(wallet, price, picks, expected):
-    all_paths = len(helpers.find_viable_combinations(wallet, picks, price))
+    all_paths = len(helper.find_viable_combinations(wallet, picks, price))
 
     assert all_paths == expected, f"Expected {expected}, but got {all_paths}"
