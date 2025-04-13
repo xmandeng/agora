@@ -84,18 +84,15 @@ def calculate_change(balance: Decimal) -> list[Decimal]:
     return change_list
 
 
-def find_acceptable_path(wallet: list[Decimal], price: Decimal) -> list[Decimal]:
+def find_acceptable_path(wallet: list[Decimal], balance: Decimal) -> list[Decimal]:
 
-    items = sorted(wallet, key=lambda item: abs(item - price))
-    pick = items[0]
-    new_wallet = items[1:]
+    if balance == 0:
+        return []
 
-    balance = price - pick
+    elif balance < 0:
+        pick = -1 * max(filter(lambda ccy: ccy <= abs(balance), DECIMALIZED_DENOMINATIONS_USD))
 
-    if balance <= 0:
-        change = calculate_change(-1 * balance)
-        return [pick] + change
     else:
-        explore = find_acceptable_path(new_wallet, balance)
+        pick = min(wallet, key=lambda item: abs(balance - item))
 
-        return [pick] + explore
+    return [pick] + find_acceptable_path(wallet, balance - pick)

@@ -19,7 +19,7 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
         queue: deque = deque()
         visited: set[tuple[Decimal, ...]] = set()
 
-        root = Node(name="root", wallet=wallet, balance=price, path=[], cost=0)
+        root = Node(value=Decimal("0"), wallet=wallet, balance=price, path=[], cost=0)
 
         queue.append(root)
         visited.add(root.hash)
@@ -33,16 +33,21 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
             if parent.balance == 0:
                 least_cost = parent.cost
                 shortest_path = parent.path
-                continue
+                break
 
             for currency in parent.denominations:
                 child = Node.create_child_node(currency, parent)
 
                 if child.hash in visited:
                     continue
+                visited.add(child.hash)
+
+                if not child.is_viable(currency):
+                    continue
 
                 queue.append(child)
-                visited.add(child.hash)
+
+        print(len(visited))
 
         return shortest_path, least_cost
 
