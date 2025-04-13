@@ -3,14 +3,15 @@ from decimal import Decimal
 from typing import Callable
 
 from agora.exceptions import check_for_sufficient_funds
+from agora.helpers import find_acceptable_path
 from agora.models import Node
 
 
 def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[list[Decimal], int]]:
     check_for_sufficient_funds(wallet, price)
 
-    shortest_path: list[Decimal] = wallet
-    least_cost: int = len(wallet)
+    shortest_path: list[Decimal] = find_acceptable_path(wallet, price)
+    least_cost: int = len(shortest_path)
 
     def breadth_first_search() -> tuple[list[Decimal], int]:
         nonlocal shortest_path, least_cost

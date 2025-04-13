@@ -33,8 +33,8 @@ class Node:
         return tuple(self.wallet)
 
     @property
-    def denominations(self) -> set[Decimal]:
-        return set(self.wallet)
+    def denominations(self) -> list[Decimal]:
+        return sorted(set(self.wallet), reverse=True)
 
     def pick_from_wallet(self, denomination: Decimal) -> list[Decimal]:
         if denomination not in self.wallet:

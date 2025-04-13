@@ -82,3 +82,20 @@ def calculate_change(balance: Decimal) -> list[Decimal]:
         change_list.append(change)
 
     return change_list
+
+
+def find_acceptable_path(wallet: list[Decimal], price: Decimal) -> list[Decimal]:
+
+    items = sorted(wallet, key=lambda item: abs(item - price))
+    pick = items[0]
+    new_wallet = items[1:]
+
+    balance = price - pick
+
+    if balance <= 0:
+        change = calculate_change(-1 * balance)
+        return [pick] + change
+    else:
+        explore = find_acceptable_path(new_wallet, balance)
+
+        return [pick] + explore
