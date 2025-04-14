@@ -1,3 +1,4 @@
+import logging
 from collections import deque
 from decimal import Decimal
 from typing import Callable
@@ -5,6 +6,9 @@ from typing import Callable
 from agora.exceptions import check_for_sufficient_funds
 from agora.helpers import find_acceptable_path
 from agora.models import Node
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 
 def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[list[Decimal], int]]:
@@ -27,9 +31,6 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
         while queue:
             parent: Node = queue.popleft()
 
-            if parent.cost >= least_cost:
-                continue
-
             if parent.balance == 0:
                 least_cost = parent.cost
                 shortest_path = parent.path
@@ -45,9 +46,12 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
                 if not child.is_viable(currency):
                     continue
 
+                if child.cost >= least_cost:
+                    continue
+
                 queue.append(child)
 
-        print(len(visited))
+        logger.info("# nodes visited %s", str(len(visited)))
 
         return shortest_path, least_cost
 

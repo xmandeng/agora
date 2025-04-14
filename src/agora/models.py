@@ -6,6 +6,7 @@ from agora.helpers import calculate_change
 from agora.ref_data import DECIMALIZED_DENOMINATIONS_USD
 
 
+# TODO: convert to immutable Pydantic model
 @dataclass
 class Node:
     value: Decimal
