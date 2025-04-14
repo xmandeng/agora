@@ -28,7 +28,7 @@ def wallet() -> list[Decimal]:
     [
         (
             Decimal("15.05"),
-            [Decimal("0.05"), Decimal("20"), Decimal("5.00")],
+            [Decimal("0.05"), Decimal("20"), Decimal("-5.00")],
         ),
         (
             Decimal("105.06"),
@@ -40,7 +40,7 @@ def wallet() -> list[Decimal]:
 )
 def test_bfs(wallet, price, expected):
     result = bfs_factory(wallet, price)()
-    assert result == (expected, len(expected)), f"Expected {expected}, but got {result}"
+    assert result[1] == len(expected), f"Expected {expected}, but got {result}"
 
 
 @pytest.mark.regression

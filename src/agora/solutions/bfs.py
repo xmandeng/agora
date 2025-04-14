@@ -1,16 +1,21 @@
+import logging
 from collections import deque
 from decimal import Decimal
 from typing import Callable
 
 from agora.exceptions import check_for_sufficient_funds
+from agora.helpers import find_acceptable_path
 from agora.models import Node
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 
 def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[list[Decimal], int]]:
     check_for_sufficient_funds(wallet, price)
 
-    shortest_path: list[Decimal] = wallet
-    least_cost: int = len(wallet)
+    shortest_path: list[Decimal] = find_acceptable_path(wallet, price)
+    least_cost: int = len(shortest_path)
 
     def breadth_first_search() -> tuple[list[Decimal], int]:
         nonlocal shortest_path, least_cost
@@ -18,7 +23,7 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
         queue: deque = deque()
         visited: set[tuple[Decimal, ...]] = set()
 
-        root = Node(name="root", wallet=wallet, balance=price, path=[], cost=0)
+        root = Node(value=Decimal("0"), wallet=wallet, balance=price, path=[], cost=0)
 
         queue.append(root)
         visited.add(root.hash)
@@ -26,22 +31,27 @@ def bfs_factory(wallet: list[Decimal], price: Decimal) -> Callable[[], tuple[lis
         while queue:
             parent: Node = queue.popleft()
 
-            if parent.cost >= least_cost:
-                continue
-
             if parent.balance == 0:
                 least_cost = parent.cost
                 shortest_path = parent.path
-                continue
+                break
 
             for currency in parent.denominations:
                 child = Node.create_child_node(currency, parent)
 
                 if child.hash in visited:
                     continue
+                visited.add(child.hash)
+
+                if not child.is_viable(currency):
+                    continue
+
+                if child.cost >= least_cost:
+                    continue
 
                 queue.append(child)
-                visited.add(child.hash)
+
+        logger.info("# nodes visited %s", str(len(visited)))
 
         return shortest_path, least_cost
 
